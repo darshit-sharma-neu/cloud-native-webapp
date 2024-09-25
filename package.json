@@ -1,0 +1,23 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "Web Application for csye6225 network structure and cloud computing",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "darshit sharma",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.12",
+    "express": "^4.21.0",
+    "pino": "^9.4.0",
+    "pino-pretty": "^11.2.2",
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

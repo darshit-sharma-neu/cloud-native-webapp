@@ -1,0 +1,10 @@
+{
+    "SERVER":{
+        "PORT": "SERVER_PORT"
+    },
+    "DATABASE": {
+        "NAME": "DB_NAME",
+        "USER": "DB_USER",
+        "PASSWORD": "DB_PASS"
+    }
+}

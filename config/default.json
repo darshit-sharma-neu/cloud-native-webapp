@@ -1,5 +1,11 @@
 {
-    "server":{
-        "PORT_NUMBER": 3000
+    "SERVER":{
+        "PORT": 3000
+    }, 
+    "DATABASE": {
+        "NAME": "csye6225",
+        "USER": "root",
+        "PASSWORD": "Darshit123",
+        "HOST": "localhost"
     }
-}
+}   

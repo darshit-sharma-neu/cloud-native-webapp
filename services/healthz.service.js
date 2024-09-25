@@ -9,11 +9,18 @@ const { checkConnection } = require('../utils/databaseConnector')
  * @param {NextFunction} next 
  */
 async function getHandler(req, res, next) {
-    if(await checkConnection()){
-        res.set('cache-control', 'no-cache')
-        res.status(200).send();
+
+    const contentLenght = req.get("Content-Length");
+    const queryLenght = Object.keys(req.query).length;
+    res.set('cache-control', 'no-cache');
+    if(contentLenght || queryLenght){
+        res.status(400).send();
     } else {
-        res.status(503).send();
+        if(await checkConnection()){
+            res.status(200).send();
+        } else {
+            res.status(503).send();
+        }
     }
 }
 

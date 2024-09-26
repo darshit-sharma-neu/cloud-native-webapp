@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
-  getHandler,
-  methodNotAllowedHandler,
+    getHandler,
+    methodNotAllowedHandler,
 } = require("../services/healthz.service");
 
 /**
@@ -10,7 +10,7 @@ const {
  * return status 503 if DB connection fails
  */
 router
-    .route('/')
+    .route("/")
     .get(getHandler)
     .head(methodNotAllowedHandler)
     .all(methodNotAllowedHandler);

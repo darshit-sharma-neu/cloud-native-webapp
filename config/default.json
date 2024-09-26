@@ -3,9 +3,9 @@
         "PORT": 3000
     }, 
     "DATABASE": {
-        "NAME": "csye6225",
-        "USER": "root",
-        "PASSWORD": "Darshit123",
+        "NAME": "",
+        "USER": "",
+        "PASSWORD": "",
         "HOST": "localhost"
     }
 }   

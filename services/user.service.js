@@ -6,11 +6,11 @@ const { encrypt } = require("../utils/passwordEncoder");
  * @param {*} userInfo
  */
 async function create(userInfo) {
-    const { firstName, lastName, email, password } = userInfo;
+    const { first_name, last_name, email, password } = userInfo;
     const encryptedPassword = await encrypt(password);
     const user = User.build({
-        firstName,
-        lastName,
+        first_name,
+        last_name,
         email,
         password: encryptedPassword,
     });
@@ -35,7 +35,27 @@ async function getByEmail(email) {
     return user.toJSON();
 }
 
+/**
+ *
+ * @param {*} userInfo
+ */
+async function update(email, userInfo) {
+    const user = await User.findOne({
+        where: {
+            email: email,
+        },
+    });
+    if (userInfo.password) {
+        userInfo.password = await encrypt(userInfo.password);
+    }
+    user.update({
+        ...userInfo,
+    });
+    await user.save();
+}
+
 module.exports = {
     create,
     getByEmail,
+    update,
 };

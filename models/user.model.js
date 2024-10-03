@@ -11,14 +11,14 @@ const User = getSequelize().define(
             primaryKey: true,
             defaultValue: DataTypes.UUIDV4
         },
-        firstName: {
+        first_name: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
                 notEmpty: true,
             },
         },
-        lastName: {
+        last_name: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
@@ -43,6 +43,8 @@ const User = getSequelize().define(
     },
     {
         timestamps: true,
+        createdAt: 'account_created',
+        updatedAt: 'account_updated'
     }
 );
 

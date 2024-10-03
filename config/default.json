@@ -3,10 +3,10 @@
         "PORT": 3000
     },
     "DATABASE": {
-        "NAME": "webapp",
-        "USER": "root",
-        "PASSWORD": "Darshit123",
-        "HOST": "localhost",
-        "PORT": "3306"
+        "NAME": "",
+        "USER": "",
+        "PASSWORD": "",
+        "HOST": "",
+        "PORT": ""
     }
 }

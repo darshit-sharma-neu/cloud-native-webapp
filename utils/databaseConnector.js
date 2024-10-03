@@ -3,10 +3,9 @@ const config = require("config");
 const logger = require("../utils/logger");
 
 let sequelize;
-
 const connect = () => {
     logger.info("Connecting to database");
-    sequelize = new Sequelize(
+    let seq = new Sequelize(
         config.get("DATABASE.NAME"),
         config.get("DATABASE.USER"),
         config.get("DATABASE.PASSWORD"),
@@ -14,17 +13,19 @@ const connect = () => {
             host: config.get("DATABASE.HOST"),
             dialect: "mysql",
             logging: false,
+            sync: true,
         }
     );
-    sequelize
-        .authenticate()
+    seq.authenticate()
         .then(() => {
             logger.info(`Connected to Database`);
         })
         .catch((error) => {
             logger.error(`Connection to DB failed: ${error}`);
         });
+    return seq;
 };
+sequelize = connect();
 
 const checkConnection = async () => {
     try {
@@ -36,7 +37,19 @@ const checkConnection = async () => {
     }
 };
 
+/**
+ * returns sequelize object
+ * @returns {Sequelize} sequelize
+ */
+const getSequelize = () => {
+    if (sequelize == null) {
+        sequelize = connect();
+    }
+    return sequelize;
+};
+
 module.exports = {
     connect,
     checkConnection,
+    getSequelize,
 };

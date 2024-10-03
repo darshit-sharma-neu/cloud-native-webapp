@@ -1,11 +1,12 @@
 {
-    "SERVER":{
+    "SERVER": {
         "PORT": 3000
-    }, 
+    },
     "DATABASE": {
-        "NAME": "",
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "localhost"
+        "NAME": "webapp",
+        "USER": "root",
+        "PASSWORD": "Darshit123",
+        "HOST": "localhost",
+        "PORT": "3306"
     }
-}   
+}

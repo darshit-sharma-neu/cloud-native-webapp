@@ -14,7 +14,7 @@ app.use(Express.urlencoded({ extended: true }));
 
 // Routes go here
 app.use("/healthz", healthzRouter);
-app.use('/user', userRouter);
+app.use('/v1/user', userRouter);
 app.use("*", pageNotFoundRouter);
 
 app.use(checkJsonValidity)

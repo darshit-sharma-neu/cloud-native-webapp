@@ -1,15 +1,17 @@
 const router = require("express").Router();
-
 const {
-    postController
+    postController,
+    getController,
 } = require("../controllers/user.controller");
-const { methodNotAllowedHandler } = require('../services/healthz.service');
-const logger = require("../utils/logger");
-/**
- * Health check endpoint
- * returns status 200 if DB connected
- * return status 503 if DB connection fails
- */
+const { methodNotAllowedHandler } = require("../services/healthz.service");
+const { checkAuth } = require("../middlewares/auth.middleware");
+
+router
+    .route("/self")
+    .get(checkAuth, getController)
+    .head(methodNotAllowedHandler)
+    .all(methodNotAllowedHandler);
+
 router
     .route("/")
     .post(postController)

@@ -1,6 +1,7 @@
 const { Request, Response, NextFunction } = require("express");
 const { create, getByEmail, update } = require("../services/user.service");
 const logger = require("../utils/logger");
+const { checkConnection } = require('../utils/databaseConnector');
 
 /**
  *
@@ -10,6 +11,10 @@ const logger = require("../utils/logger");
  */
 async function postController(req, res, next) {
     try {
+        if(!(await checkConnection())){
+            res.status(503).send();
+            return;
+        }
         const requiredFields = ["first_name", "last_name", "email", "password"];
         const inputFields = req.body ? Object.keys(req.body) : [];
         if (

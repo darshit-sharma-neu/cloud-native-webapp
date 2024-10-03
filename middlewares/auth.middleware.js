@@ -1,6 +1,7 @@
 const { User } = require("../models/user.model");
 const { Request, Response, NextFunction } = require("express");
 const { compare } = require("../utils/passwordEncoder");
+const { checkConnection } = require('../utils/databaseConnector')
 
 /**
  *
@@ -11,6 +12,10 @@ const { compare } = require("../utils/passwordEncoder");
 async function checkAuth(req, res, next) {
     try {
         if (req.headers.authorization) {
+            if(!(await checkConnection())){
+                res.status(503).send();
+                return;
+            }
             const [email, password] = new Buffer.from(
                 req.headers.authorization.split(" ")[1],
                 "base64"
@@ -37,7 +42,8 @@ async function checkAuth(req, res, next) {
             res.status(401).send();
         }
     } catch (error) {
-        console.log(error);
+        res.status(500).send();
+        logger.error(error.message)
     }
 }
 

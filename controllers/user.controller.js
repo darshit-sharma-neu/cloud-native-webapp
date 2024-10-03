@@ -1,7 +1,7 @@
 const { Request, Response, NextFunction } = require("express");
 const { create, getByEmail, update } = require("../services/user.service");
 const logger = require("../utils/logger");
-const { checkConnection } = require('../utils/databaseConnector');
+const { checkConnection } = require("../utils/databaseConnector");
 
 /**
  *
@@ -11,19 +11,20 @@ const { checkConnection } = require('../utils/databaseConnector');
  */
 async function postController(req, res, next) {
     try {
-        if(!(await checkConnection())){
+        if (!(await checkConnection())) {
             res.status(503).send();
             return;
         }
         const requiredFields = ["first_name", "last_name", "email", "password"];
         const inputFields = req.body ? Object.keys(req.body) : [];
         if (
-            inputFields == [] ||
-            !requiredFields.every((field) => {
-                const x = inputFields.includes(field);
-                return x;
-            })
+            inputFields.length == 0 ||
+            !inputFields.every((field) => requiredFields.includes(field))
         ) {
+            res.status(400).send();
+            return;
+        }
+        if(!req.body.password){
             res.status(400).send();
             return;
         }

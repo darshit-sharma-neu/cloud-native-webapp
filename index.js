@@ -19,8 +19,6 @@ app.use("*", pageNotFoundRouter);
 
 app.use(checkJsonValidity)
 
-// connect();
-
 app.listen(config.get("SERVER.PORT"), () => {
     logger.info(`Server is listening on PORT: ${config.get("SERVER.PORT")}`);
 });

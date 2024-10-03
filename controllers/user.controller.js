@@ -73,9 +73,8 @@ async function putController(req, res, next) {
         const allowedFields = ["first_name", "last_name", "password"];
         const inputFields = req.body ? Object.keys(req.body) : [];
         if (
-            (inputFields == [] ||
-                inputFields.every((field) => allowedFields.includes(field))) &&
-            inputFields.length > 3
+            inputFields.length == 0 ||
+            !inputFields.every((field) => allowedFields.includes(field))
         ) {
             res.status(400).send();
         } else {

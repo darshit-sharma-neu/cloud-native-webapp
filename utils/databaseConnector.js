@@ -2,6 +2,7 @@ const { Sequelize } = require("sequelize");
 const config = require("config");
 const logger = require("../utils/logger");
 
+let sequelize;
 const connect = () => {
     logger.info("Connecting to database");
     let seq = new Sequelize(
@@ -12,11 +13,10 @@ const connect = () => {
             host: config.get("DATABASE.HOST"),
             dialect: "mysql",
             logging: false,
-            sync: true
+            sync: true,
         }
     );
-    seq
-        .authenticate()
+    seq.authenticate()
         .then(() => {
             logger.info(`Connected to Database`);
         })
@@ -25,8 +25,7 @@ const connect = () => {
         });
     return seq;
 };
-
-let sequelize = connect();
+sequelize = connect();
 
 const checkConnection = async () => {
     try {
@@ -43,14 +42,14 @@ const checkConnection = async () => {
  * @returns {Sequelize} sequelize
  */
 const getSequelize = () => {
-    if(sequelize == null){
+    if (sequelize == null) {
         sequelize = connect();
     }
-    return sequelize
-}
+    return sequelize;
+};
 
 module.exports = {
     connect,
     checkConnection,
-    getSequelize
+    getSequelize,
 };

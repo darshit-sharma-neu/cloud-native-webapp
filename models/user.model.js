@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { getSequelize } = require("../utils/databaseConnector");
 
-const User = getSequelize().define(
+const User = getSequelize()?.define(
     "User",
     {
         id: {
@@ -9,7 +9,7 @@ const User = getSequelize().define(
             unique: true,
             allowNull: false,
             primaryKey: true,
-            defaultValue: DataTypes.UUIDV4
+            defaultValue: DataTypes.UUIDV4,
         },
         first_name: {
             type: DataTypes.STRING,
@@ -43,8 +43,8 @@ const User = getSequelize().define(
     },
     {
         timestamps: true,
-        createdAt: 'account_created',
-        updatedAt: 'account_updated'
+        createdAt: "account_created",
+        updatedAt: "account_updated",
     }
 );
 

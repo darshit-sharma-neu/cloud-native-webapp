@@ -23,6 +23,11 @@ jobs:
 
             - name: Install mysql
               run: |
+                echo "${{secrets.MYSQL_ROOT_PASS}}"
+                echo "${{secrets.DB_HOST}}"
+                echo "${{secrets.DB_PORT}}"
+                echo "${{secrets.DB_PASS}}"
+                echo "${{secrets.DB_USER}}"
                 sudo systemctl start mysql
                 sudo systemctl status mysql
                 mysql -u root -p ${{secrets.MYSQL_ROOT_PASS}} -e "CREATE USER '${{secrets.DB_USER}}'@'localhost' IDENTIFIED BY '${{secrets.DB_PASS}}';"

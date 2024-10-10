@@ -122,4 +122,5 @@ describe("User API Integration Test", () => {
             expect(response.status).toBe(405);
         });
     });
+    
 });

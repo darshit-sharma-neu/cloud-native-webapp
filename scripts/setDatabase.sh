@@ -1,6 +1,6 @@
-apt update
-apt install mysql-server
-systemctl start mysql.service
+sudo apt update
+sudo apt install mysql-server
+sudo systemctl start mysql.service
 
 # Create new user
 mysql -u root --skip-password -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"

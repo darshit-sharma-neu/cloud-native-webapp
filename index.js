@@ -19,10 +19,11 @@ app.use("*", pageNotFoundRouter);
 
 app.use(checkJsonValidity)
 
-app.listen(config.get("SERVER.PORT"), () => {
+const server = app.listen(config.get("SERVER.PORT"), () => {
     logger.info(`Server is listening on PORT: ${config.get("SERVER.PORT")}`);
 });
 
 module.exports = {
-    app
+    app,
+    server
 }

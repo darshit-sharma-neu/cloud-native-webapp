@@ -18,15 +18,16 @@ jobs:
               with:
                 node-version: '20'
 
-            # - name: Setup Mysql
-            #   run: |
-            #     chmod +x ./scripts/setDatabase.sh
-            #     ./scripts/setDatabase.sh
-            #   shell: bash
-
             - name: Install dependencies
               run: npm ci
-            
+
+            - name: Install mysql
+              run: |
+                sudo apt-get update
+                sudo apt-get install mysql-server
+                sudo systemctl start mysql
+                sudo systemctl status mysql
+
             - name: Run integration tests
               run: npm run test
 

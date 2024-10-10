@@ -5,8 +5,8 @@ const logger = require("./utils/logger");
 const { connect } = require("./utils/databaseConnector");
 const healthzRouter = require("./routes/healthz.route");
 const pageNotFoundRouter = require("./routes/pageNotFound.route");
-const userRouter = require('./routes/user.route');
-const { checkJsonValidity } = require('./middlewares/validJSON.middleware');
+const userRouter = require("./routes/user.route");
+const { checkJsonValidity } = require("./middlewares/validJSON.middleware");
 
 // middlewares
 app.use(Express.json());
@@ -14,15 +14,16 @@ app.use(Express.urlencoded({ extended: true }));
 
 // Routes go here
 app.use("/healthz", healthzRouter);
-app.use('/v1/user', userRouter);
+app.use("/v1/user", userRouter);
 app.use("*", pageNotFoundRouter);
 
-app.use(checkJsonValidity)
+app.use(checkJsonValidity);
 
-app.listen(config.get("SERVER.PORT"), () => {
+const server = app.listen(config.get("SERVER.PORT"), () => {
     logger.info(`Server is listening on PORT: ${config.get("SERVER.PORT")}`);
 });
 
 module.exports = {
-    app
-}
+    app,
+    server,
+};

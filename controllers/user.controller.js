@@ -21,11 +21,11 @@ async function postController(req, res, next) {
             inputFields.length == 0 ||
             !inputFields.every((field) => requiredFields.includes(field))
         ) {
-            res.status(401).send();
+            res.status(400).send();
             return;
         }
         if(!req.body.password){
-            res.status(400).send();
+            res.status(401).send();
             return;
         }
         const userInfo = req.body;

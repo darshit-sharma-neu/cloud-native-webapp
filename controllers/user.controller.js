@@ -21,7 +21,7 @@ async function postController(req, res, next) {
             inputFields.length == 0 ||
             !inputFields.every((field) => requiredFields.includes(field))
         ) {
-            res.status(401).send();
+            res.status(200).send();
             return;
         }
         if(!req.body.password){

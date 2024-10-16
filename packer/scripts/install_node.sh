@@ -16,9 +16,9 @@ echo "Installing unzip"
 sudo apt-get -y install unzip
 
 # move zip to opt
-sudo unzip /home/ubuntu/webapp.zip -d /home/ubuntu/
-sudo mv /home/ubuntu/webapp /opt/
-sudo chown -R ubuntu:ubuntu /opt/webapp
+sudo unzip /home/csye6225/webapp.zip -d /home/csye6225/
+sudo mv /home/csye6225/webapp /opt/
+sudo chown -R csye6225:csye6225 /opt/webapp
 
 # Install dependencies
 cd /opt/webapp

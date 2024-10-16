@@ -22,17 +22,12 @@ variable "region" {
   type = string
 }
 
-variable "profile" {
-  type = string
-}
-
 variable "ssh_username" {
   type = string
 }
 
 
 source "amazon-ebs" "webapp" {
-  profile       = "${var.profile}"
   region        = "${var.region}"
   instance_type = "t2.micro"
   source_ami_filter {

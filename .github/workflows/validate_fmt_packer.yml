@@ -15,7 +15,6 @@ jobs:
             DB_PORT: ${{secrets.DB_PORT}}
             DB_NAME: ${{secrets.DB_NAME}}
             region: ${{secrets.region}}
-            profile: ${{secrets.aws_profile}}
             ssh_username: ${{secrets.ssh_username}}
 
             
@@ -30,6 +29,10 @@ jobs:
                   sudo apt-get update && sudo apt-get install packer
                   packer --version
 
+
+            - name: Packer init
+              run: packer init packer/template.pkr.hcl 
+
             - name: Format Packer Template
               run: packer fmt packer/template.pkr.hcl
 
@@ -41,6 +44,5 @@ jobs:
                     -var="DB_HOST=$DB_HOST" 
                     -var="DB_PORT=$DB_PORT" 
                     -var="region=$region" 
-                    -var="profile=$profile" 
                     -var="ssh_username=$ssh_username" 
                 packer/template.pkr.hcl

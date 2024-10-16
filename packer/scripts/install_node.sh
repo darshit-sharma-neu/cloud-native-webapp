@@ -9,7 +9,6 @@ export NVM_DIR="$HOME/.nvm"
 # Install Node
 echo "Installing Node v20.17.0"
 nvm install v20.17.0
-
 echo "Node setup completed"
 
 # install unzip
@@ -21,6 +20,7 @@ sudo unzip /home/ubuntu/webapp.zip -d /home/ubuntu/
 sudo mv /home/ubuntu/webapp /opt/
 sudo chown -R ubuntu:ubuntu /opt/webapp
 
+# Install dependencies
 cd /opt/webapp
 echo "Installing dependencies"
 npm install

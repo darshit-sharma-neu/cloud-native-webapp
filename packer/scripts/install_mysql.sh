@@ -2,8 +2,8 @@
 
 # Install Mysql
 echo "Installing mysql-server"
-sudo apt update
-sudo apt -y install mysql-server
+sudo apt-get update
+sudo apt-get -y install mysql-server
 sudo systemctl start mysql.service
 
 # Create new user

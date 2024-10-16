@@ -14,7 +14,11 @@ jobs:
             DB_PASS: ${{secrets.DB_PASS}}
             DB_PORT: ${{secrets.DB_PORT}}
             DB_NAME: ${{secrets.DB_NAME}}
-        
+            region: ${{secrets.region}}
+            profile: ${{secrets.aws_profile}}
+            ssh_username: ${{secrets.ssh_username}}
+
+            
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -30,4 +34,13 @@ jobs:
               run: packer fmt packer/template.pkr.hcl
 
             - name: Validate Packer Template
-              run: packer validate -var="DB_NAME=$DB_NAME" -var="DB_USER=$DB_USER" -var="DB_PASS=$DB_PASS" -var="DB_HOST=$DB_HOST" -var="DB_PORT=$DB_PORT" packer/template.pkr.hcl
+              run: packer validate 
+                    -var="DB_NAME=$DB_NAME" 
+                    -var="DB_USER=$DB_USER" 
+                    -var="DB_PASS=$DB_PASS" 
+                    -var="DB_HOST=$DB_HOST" 
+                    -var="DB_PORT=$DB_PORT" 
+                    -var="region=$region" 
+                    -var="profile=$profile" 
+                    -var="ssh_username=$ssh_username" 
+                packer/template.pkr.hcl

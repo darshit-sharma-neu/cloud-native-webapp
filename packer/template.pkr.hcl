@@ -26,6 +26,14 @@ variable "ssh_username" {
   type = string
 }
 
+packer {
+  required_plugins {
+    amazon = {
+      version = ">= 0.0.2"
+      source  = "github.com/hashicorp/amazon"
+    }
+  }
+}
 
 source "amazon-ebs" "webapp" {
   region        = "${var.region}"

@@ -5,9 +5,9 @@ After=network.target
 [Service]
 WorkingDirectory=/opt/webapp
 Type=simple
-ExecStart=/home/csye6225/.nvm/versions/node/v20.17.0/bin/node /opt/webapp/index.js
+ExecStart=/home/ubuntu/.nvm/versions/node/v20.17.0/bin/node /opt/webapp/index.js
 Restart=always
-User=csye6225              
+User=ubuntu              
 
 [Install]
 WantedBy=multi-user.target

@@ -34,7 +34,7 @@ jobs:
               run: packer init packer/template.pkr.hcl 
 
             - name: Format Packer Template
-              run: packer fmt packer/template.pkr.hcl
+              run: packer fmt -check packer/template.pkr.hcl
 
             - name: Validate Packer Template
               run: |

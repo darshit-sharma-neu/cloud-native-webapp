@@ -23,7 +23,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Zip repo
-              run: zip -r webapp.zip packer
+              run: zip -r packer/webapp.zip .
 
             - name: Install Packer
               run: |

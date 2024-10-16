@@ -37,7 +37,9 @@ jobs:
               run: packer fmt packer/template.pkr.hcl
 
             - name: Validate Packer Template
-              run: packer validate 
+              run: |
+                cd packer 
+                packer validate 
                     -var="DB_NAME=$DB_NAME" 
                     -var="DB_USER=$DB_USER" 
                     -var="DB_PASS=$DB_PASS" 
@@ -45,4 +47,4 @@ jobs:
                     -var="DB_PORT=$DB_PORT" 
                     -var="region=$region" 
                     -var="ssh_username=$ssh_username" 
-                packer/template.pkr.hcl
+                template.pkr.hcl

@@ -10,9 +10,9 @@ sudo systemctl start mysql.service
 echo "Creating db user"
 # Create new user
 sudo mysql -u root --skip-password -e "
-    CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
-    GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost';
-    FLUSH PRIVILEGES;
+    drop user '$DB_USER'@localhost;
+    flush privileges;
+    create user '$DB_USER'@'localhost' identified by '$DB_PASS'
 "
 
 echo "Database setup completed"

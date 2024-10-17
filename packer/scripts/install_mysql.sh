@@ -12,10 +12,10 @@ echo "Creating db user"
 mysql -uroot -proot -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
 
 # Grant privileges to the new user
-mysql -uroot -proot -e "GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost';"
+mysql -uroot -p${DB_PASS} -e "GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost';"
 
 # Apply the changes (reload privilege tables)
-mysql -uroot -proot -e "FLUSH PRIVILEGES;"
+mysql -uroot -p${DB_PASS} -e "FLUSH PRIVILEGES;"
 
 echo "Database setup completed"
 

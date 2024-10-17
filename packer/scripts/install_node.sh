@@ -1,14 +1,11 @@
 #!/bin/bash
 
-# Installing nvm
-echo "Installing NVM"
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 # Install Node
 echo "Installing Node v20.17.0"
-nvm install v20.17.0
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node -v
+npm -v
 echo "Node setup completed"
 
 # install unzip
@@ -16,12 +13,12 @@ echo "Installing unzip"
 sudo apt-get -y install unzip
 
 # move zip to opt
-sudo unzip /home/ubuntu/webapp.zip -d /home/ubuntu/
-sudo mv /home/ubuntu/webapp /opt/
-sudo chown -R ubuntu:ubuntu /opt/webapp
+sudo mv /tmp/webapp.zip /home/
+sudo unzip /home/webapp.zip -d /home/
+sudo chown -R csye6225:csye6225 /home/webapp
 
 # Install dependencies
-cd /opt/webapp
+cd /home/webapp
 echo "Installing dependencies"
-npm install
+sudo npm install
 echo "Webapp setup completed"

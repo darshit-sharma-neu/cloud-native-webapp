@@ -48,10 +48,13 @@ source "amazon-ebs" "webapp" {
 build {
   sources = ["source.amazon-ebs.webapp"]
 
-  // get the zip
   provisioner "file" {
     source      = "webapp.zip"
-    destination = "/home/ubuntu/webapp.zip"
+    destination = "/tmp/webapp.zip"
+  }
+
+  provisioner "shell" {
+    script = "scripts/create_user.sh"
   }
 
   provisioner "shell" {

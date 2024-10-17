@@ -3,9 +3,9 @@ Description=Cloud native webapp
 After=network.target 
 
 [Service]
-WorkingDirectory=/opt/webapp
+WorkingDirectory=/home/webapp
 Type=simple
-ExecStart=/home/ubuntu/.nvm/versions/node/v20.17.0/bin/node /opt/webapp/index.js
+ExecStart=/usr/bin/node /home/webapp/index.js
 Restart=always
 User=ubuntu              
 

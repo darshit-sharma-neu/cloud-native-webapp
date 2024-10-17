@@ -1,3 +1,4 @@
+# Define variables
 variable "DB_PASS" {
   type = string
 }
@@ -41,6 +42,7 @@ source "amazon-ebs" "webapp" {
   source_ami    = "ami-0866a3c8686eaeeba"
   ssh_username  = "${var.ssh_username}"
   ami_name      = "webapp-${formatdate("YYYY-MM-DD-hhmmss", timestamp())}"
+  ami_users     = ["442042553645", "911167914313"]
 }
 
 

@@ -18,6 +18,9 @@ jobs:
             ssh_username: ${{secrets.ssh_username}}
             AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
             AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+            instance_type: ${{secrets.instance_type}}
+            source_ami: ${{secrets.source_ami}}
+
 
         steps:
             - name: Checkout repository

@@ -6,7 +6,7 @@ on:
             - main
 
 jobs:
-    packer_validate_fmt:
+    packer_build_ami:
         runs-on: ubuntu-latest
         env:
             DB_HOST: ${{secrets.DB_HOST}}

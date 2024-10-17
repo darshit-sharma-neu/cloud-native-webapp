@@ -9,13 +9,11 @@ sudo systemctl start mysql.service
 # Create new user
 echo "Creating db user"
 # Create new user
-mysql -uroot -proot -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
-
-# Grant privileges to the new user
-mysql -uroot -p${DB_PASS} -e "GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost';"
-
-# Apply the changes (reload privilege tables)
-mysql -uroot -p${DB_PASS} -e "FLUSH PRIVILEGES;"
+mysql -uroot -proot -e "
+    CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
+    GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost';
+    FLUSH PRIVILEGES;
+"
 
 echo "Database setup completed"
 

@@ -1,0 +1,45 @@
+name: Packer Validate and Format Check
+
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    packer_validate_fmt:
+        runs-on: ubuntu-latest
+        env:
+            DB_HOST: ${{secrets.DB_HOST}}
+            DB_USER: ${{secrets.DB_USER}}
+            DB_PASS: ${{secrets.DB_PASS}}
+            DB_PORT: ${{secrets.DB_PORT}}
+            DB_NAME: ${{secrets.DB_NAME}}
+            region: ${{secrets.region}}
+            ssh_username: ${{secrets.ssh_username}}
+
+            
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Zip repo
+              run: zip -r packer/webapp.zip .
+
+            - name: Install Packer
+              run: |
+                  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+                  sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+                  sudo apt-get update && sudo apt-get install packer
+                  packer --version
+
+
+            - name: Packer init
+              run: packer init packer/template.pkr.hcl 
+
+            - name: Format Packer Template
+              run: packer fmt -check packer/template.pkr.hcl
+
+            - name: Validate Packer Template
+              run: |
+                cd packer 
+                packer validate -var="DB_NAME=$DB_NAME" -var="DB_USER=$DB_USER" -var="DB_PASS=$DB_PASS" -var="DB_HOST=$DB_HOST" -var="DB_PORT=$DB_PORT" -var="region=$region" -var="ssh_username=$ssh_username" template.pkr.hcl

@@ -25,7 +25,7 @@ async function postController(req, res, next) {
             return;
         }
         if(!req.body.password){
-            res.status(400).send();
+            res.status(401).send();
             return;
         }
         const userInfo = req.body;

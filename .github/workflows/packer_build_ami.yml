@@ -26,9 +26,7 @@ jobs:
 
             - name: Zip repo
               run: |
-                mkdir -p webapp
-                cp -r * webapp/
-                zip -r packer/webapp.zip .
+                zip -r packer/webapp.zip ../webapp
 
             - name: Install Packer
               run: |

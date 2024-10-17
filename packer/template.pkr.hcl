@@ -83,7 +83,6 @@ build {
   provisioner "shell" {
     inline = [
       "sudo mkdir -p /etc/systemd/system/webapp.service.d",
-      # Create a drop-in file to define environment variables
       "sudo tee /etc/systemd/system/webapp.service.d/env.conf > /dev/null <<EOL",
       "[Service]",
       "Environment=DB_HOST=${var.DB_HOST}",
@@ -92,7 +91,6 @@ build {
       "Environment=DB_PORT=${var.DB_PORT}",
       "Environment=DB_NAME=${var.DB_NAME}",
       "EOL",
-      # Reload systemd to apply the changes
       "sudo systemctl daemon-reload"
     ]
   }

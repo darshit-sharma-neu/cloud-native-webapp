@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         env:
             DB_HOST: ${{secrets.DB_HOST}}
-            DB_USER: ${{secrets.DB_USER}}
+            DB_USER: ${{secrets.TEST_DB_USER}}
             DB_PASS: ${{secrets.DB_PASS}}
             DB_PORT: ${{secrets.DB_PORT}}
             DB_NAME: ${{secrets.DB_NAME}}

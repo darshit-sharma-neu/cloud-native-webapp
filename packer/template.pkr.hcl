@@ -27,6 +27,14 @@ variable "ssh_username" {
   type = string
 }
 
+variable "instance_type" {
+  type = string
+}
+
+variable "source_ami" {
+  type = string
+}
+
 packer {
   required_plugins {
     amazon = {

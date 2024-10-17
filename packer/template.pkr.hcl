@@ -38,9 +38,9 @@ packer {
 source "amazon-ebs" "webapp" {
   region        = "${var.region}"
   instance_type = "t2.micro"
-  source_ami = "ami-0866a3c8686eaeeba"
-  ssh_username = "${var.ssh_username}"
-  ami_name     = "webapp-${formatdate("YYYY-MM-DD-hhmmss", timestamp())}"
+  source_ami    = "ami-0866a3c8686eaeeba"
+  ssh_username  = "${var.ssh_username}"
+  ami_name      = "webapp-${formatdate("YYYY-MM-DD-hhmmss", timestamp())}"
 }
 
 

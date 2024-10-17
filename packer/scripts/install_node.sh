@@ -23,5 +23,5 @@ sudo chown -R ubuntu:ubuntu /opt/webapp
 # Install dependencies
 cd /opt/webapp
 echo "Installing dependencies"
-sudo npm install
+npm install
 echo "Webapp setup completed"

@@ -48,7 +48,7 @@ jobs:
             - name: Format Packer Template
               run: packer fmt -check packer/template.pkr.hcl
 
-            - name: Validate Packer Template
+            - name: Build Packer Template
               run: |
                 cd packer 
                 packer build -var="DB_NAME=$DB_NAME" -var="DB_USER=$DB_USER" -var="DB_PASS=$DB_PASS" -var="DB_HOST=$DB_HOST" -var="DB_PORT=$DB_PORT" -var="region=$region" -var="ssh_username=$ssh_username" template.pkr.hcl

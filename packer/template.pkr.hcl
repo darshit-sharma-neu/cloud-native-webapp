@@ -93,16 +93,16 @@ build {
     ]
   }
 
-  # provisioner "shell" {
-  #   environment_vars = [
-  #     "DB_USER=${var.DB_USER}",
-  #     "DB_PASS=${var.DB_PASS}",
-  #     "DB_HOST=${var.DB_HOST}",
-  #     "DB_PORT=${var.DB_PORT}",
-  #     "DB_NAME=${var.DB_NAME}"
-  #   ]
-  #   script = "scripts/run_migration.sh"
-  # }
+  provisioner "shell" {
+    environment_vars = [
+      "DB_USER=${var.DB_USER}",
+      "DB_PASS=${var.DB_PASS}",
+      "DB_HOST=${var.DB_HOST}",
+      "DB_PORT=${var.DB_PORT}",
+      "DB_NAME=${var.DB_NAME}"
+    ]
+    script = "scripts/run_migration.sh"
+  }
 
   provisioner "shell" {
     environment_vars = [

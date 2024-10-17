@@ -76,6 +76,17 @@ build {
     script = "scripts/install_mysql.sh"
   }
 
+   provisioner "shell" {
+    environment_vars = [
+      "DB_USER=${var.DB_USER}",
+      "DB_PASS=${var.DB_PASS}",
+      "DB_HOST=${var.DB_HOST}",
+      "DB_PORT=${var.DB_PORT}",
+      "DB_NAME=${var.DB_NAME}"
+    ]
+    script = "scripts/run_migration.sh"
+  }
+
   provisioner "shell" {
     inline = [
       "sudo mkdir -p /etc/systemd/system/webapp.service.d",
@@ -91,17 +102,6 @@ build {
       # Reload systemd to apply the changes
       "sudo systemctl daemon-reload"
     ]
-  }
-
-  provisioner "shell" {
-    environment_vars = [
-      "DB_USER=${var.DB_USER}",
-      "DB_PASS=${var.DB_PASS}",
-      "DB_HOST=${var.DB_HOST}",
-      "DB_PORT=${var.DB_PORT}",
-      "DB_NAME=${var.DB_NAME}"
-    ]
-    script = "scripts/run_migration.sh"
   }
 
   provisioner "shell" {

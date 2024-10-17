@@ -38,16 +38,7 @@ packer {
 source "amazon-ebs" "webapp" {
   region        = "${var.region}"
   instance_type = "t2.micro"
-  source_ami_filter {
-    filters = {
-      name                = "ubuntu/images/hvm-ssd/ubuntu-lunar-*"
-      architecture        = "x86_64"
-      root-device-type    = "ebs"
-      virtualization-type = "hvm"
-    }
-    owners      = ["099720109477"]
-    most_recent = true
-  }
+  source_ami = "ami-0866a3c8686eaeeba"
   ssh_username = "${var.ssh_username}"
   ami_name     = "webapp-${formatdate("YYYY-MM-DD-hhmmss", timestamp())}"
 }

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo "List contents of webapp"
-sudo ls -la /home/webapp
+ls -la /home/webapp
 
 echo "Set Permissions for webapp"
-sudo chown -R csye6225:csye6225 /home/webapp
+sudo chown -R ubuntu:ubuntu /home/webapp
 
 echo "List contents of webapp"
 sudo ls -la /home/webapp

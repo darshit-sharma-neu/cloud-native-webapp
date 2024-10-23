@@ -105,7 +105,7 @@ build {
     ]
   }
 
-  provisioner "shell" {
+  provisioner "shell"   {
     environment_vars = [
       "DB_USER=${var.DB_USER}",
       "DB_PASS=${var.DB_PASS}",

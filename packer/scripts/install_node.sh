@@ -18,6 +18,7 @@ sudo ls -la /home
 sudo unzip /home/webapp.zip -d /home/
 sudo ls -la /home
 sudo chown -R csye6225:csye6225 /home/webapp
+sudo chown -R csye6225:csye6225 /home/webapp.zip
 
 # Install dependencies
 cd /home/webapp

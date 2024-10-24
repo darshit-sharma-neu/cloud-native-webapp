@@ -1,23 +1,4 @@
 # Define variables
-variable "DB_PASS" {
-  type = string
-}
-
-variable "DB_USER" {
-  type = string
-}
-
-variable "DB_HOST" {
-  type = string
-}
-
-variable "DB_PORT" {
-  type = string
-}
-
-variable "DB_NAME" {
-  type = string
-}
 
 variable "region" {
   type = string
@@ -52,8 +33,6 @@ source "amazon-ebs" "webapp" {
   ami_name      = "webapp-${formatdate("YYYY-MM-DD-hhmmss", timestamp())}"
   ami_users     = ["442042553645", "911167914313"]
 }
-
-
 
 build {
   sources = ["source.amazon-ebs.webapp"]

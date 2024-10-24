@@ -1,13 +1,15 @@
 [Unit]
 Description=Cloud native webapp
-After=network.target 
+After=network.target
 
 [Service]
 WorkingDirectory=/home/webapp
 Type=simple
 ExecStart=/usr/bin/node /home/webapp/index.js
-Restart=always
-User=ubuntu              
+Restart=on-failure
+RestartSec=5
+User=csye6225  
+
 
 [Install]
 WantedBy=multi-user.target

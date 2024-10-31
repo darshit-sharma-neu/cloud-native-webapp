@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
 const logger = require('./logger')
-const config = require('config')
+const config = require('config');
 
 /**
  * 
@@ -20,8 +20,10 @@ const uploadToS3 = async (filePath, fileName, userId) => {
             ContentType: fileContent.fileType,
         }
         const s3 = new AWS.S3()
+        logger.info("Uploading file to S3...", {...uploadParams});
         const upload = await s3.upload(uploadParams).promise();
         if(!upload){
+            logger.error("Upload to s3 failed !upload");
             throw new Error("Upload to s3 failed");
         }else {
             fs.unlinkSync(filePath);

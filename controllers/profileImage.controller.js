@@ -16,6 +16,7 @@ async function postController(req, res, next) {
             res.status(400).send();
             return;
         }
+        logger.info("postController - Uploading file to S3");
         const response = await create(req.file.path, req.file.originalname, req.userContext.email);
         if(response.profileImage){
             res.status(201).send(response.profileImage);

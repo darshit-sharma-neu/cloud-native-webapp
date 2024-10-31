@@ -9,6 +9,7 @@ const { ProfileImage } = require("../models/profileImage.model");
 async function create(filePath, fileName, userEmail) {
     // get user
     const user = await getByEmail(userEmail);
+    logger.info("User found");
     if (!user) {
         throw new Error("User not found");
     }

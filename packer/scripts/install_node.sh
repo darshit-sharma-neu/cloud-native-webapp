@@ -27,8 +27,8 @@ sudo npm install
 echo "Webapp setup completed"
 
 # Create temp and log directories
-mkdir /home/webapp/temp
-mkdir /home/webapp/log
+sudo mkdir /home/webapp/temp
+sudo mkdir /home/webapp/log
 sudo chown -R csye6225:csye6225 /home/webapp/temp
 sudo chown -R csye6225:csye6225 /home/webapp/log
 ls -ls /home/webapp

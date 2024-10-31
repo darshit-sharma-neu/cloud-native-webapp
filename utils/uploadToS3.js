@@ -14,8 +14,9 @@ const uploadToS3 = async (filePath, fileName, userId) => {
     try{
         const startTime = Date.now();
         const fileContent = fs.readFileSync(filePath);
+        const bucketName = config.get("S3.BUCKET_NAME");
         const uploadParams = {
-            Bucket: config.get("S3.BUCKET_NAME"),
+            Bucket: bucketName,
             Key: `${userId}/${fileName}`, // File name on S3
             Body: fileContent,
             ContentType: fileContent.fileType,
@@ -30,7 +31,7 @@ const uploadToS3 = async (filePath, fileName, userId) => {
             const duration = Date.now() - startTime;
             statsdClient.timing('s3.upload.duration', duration);
             return {
-                fileUrl: upload.Location
+                fileUrl: `${bucketName}/${userId}/${fileName}`
             }
         }
 

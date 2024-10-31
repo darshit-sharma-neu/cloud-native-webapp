@@ -12,6 +12,7 @@
     "author": "darshit sharma",
     "license": "ISC",
     "dependencies": {
+        "@sendgrid/mail": "^8.1.4",
         "aws-sdk": "^2.1691.0",
         "bcrypt": "^5.1.1",
         "config": "^3.3.12",

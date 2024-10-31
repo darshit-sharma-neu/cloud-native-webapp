@@ -1,20 +1,19 @@
 const { getByEmail } = require("../services/user.service");
 const { uploadToS3, deleteImage } = require("../utils/uploadToS3");
 const { ProfileImage } = require("../models/profileImage.model");
-const {logger} = require("../utils/logger");
+const { statsdClient } = require("../utils/statsd");
 
 /**
  * Upload Images to S3
  *
  */
 async function create(filePath, fileName, userEmail) {
-    // get user
+    const startTime = Date.now();
     const user = await getByEmail(userEmail);
-    logger.info("User found");
     if (!user) {
         throw new Error("User not found");
     }
-    // check if user already has a profile image
+
     const profileImageExsisting = await ProfileImage.findOne({
         where: {
             user_id: user.id,
@@ -23,7 +22,7 @@ async function create(filePath, fileName, userEmail) {
 
     if (!profileImageExsisting) {
         const { fileUrl } = await uploadToS3(filePath, fileName, user.id);
-        // save info in db
+
         if (fileUrl) {
             const profileImage = ProfileImage.build({
                 file_name: fileName,
@@ -32,6 +31,7 @@ async function create(filePath, fileName, userEmail) {
             });
 
             await profileImage.save();
+            statsdClient.timing("db.profileImages.create", Date.now() - startTime);
             return {
                 profileImage: profileImage.toJSON(),
             };
@@ -44,17 +44,19 @@ async function create(filePath, fileName, userEmail) {
 }
 
 async function getByUserEmail(email) {
+    const startTime = Date.now();
     const user = await getByEmail(email);
     const profileImage = await ProfileImage.findOne({
         where: {
             user_id: user.id,
         },
     });
-    if(!profileImage){
+    if (!profileImage) {
         return {
             response: null,
         };
     }
+    statsdClient.timing("db.profileImages.getByUserEmail", Date.now() - startTime);
     return {
         user: user,
         response: profileImage.toJSON(),
@@ -62,6 +64,7 @@ async function getByUserEmail(email) {
 }
 
 async function deleteImageByUserEmail(email) {
+    const startTime = Date.now();
     const user = await getByEmail(email);
 
     const profileImage = await ProfileImage.findOne({
@@ -75,12 +78,12 @@ async function deleteImageByUserEmail(email) {
             imageNotFound: true,
         };
     }
-
     const deleteStatus = await deleteImage(
         `${user.id}/${profileImage.file_name}`
     );
     if (deleteStatus) {
         await profileImage.destroy();
+        statsdClient.timing("db.profileImages.destroy", Date.now() - startTime);
         return {};
     } else {
         return {

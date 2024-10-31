@@ -9,11 +9,24 @@ const { methodNotAllowedHandler } = require("../services/healthz.service");
 const { checkAuth } = require("../middlewares/auth.middleware");
 const { jsonBodyOnly } = require("../middlewares/jsonBodyOnly.middleware");
 const { upload } = require("../middlewares/fileUpload.middleware");
+const { logger } = require("../utils/logger");
 
 
 router
     .route("/self/pic")
-    .post(checkAuth, upload.single('image') ,imageController.postController)
+    .post(checkAuth, (req,res,next) => {
+        upload.single('image')(req,res,(err) => {
+            if (err) {
+                if (err.message === 'Only images are allowed') {
+                    logger.error({ error: err.message }, "Image upload failed");
+                    return res.status(400).send();
+                }
+                logger.error({ error: err.message }, "Image upload failed");
+                return res.status(500).send();
+            }
+            next();
+        });
+    },imageController.postController)
     .get(checkAuth, imageController.getController)
     .delete(checkAuth, imageController.deleteController)
     .all(methodNotAllowedHandler);

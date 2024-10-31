@@ -1,11 +1,13 @@
 const { User } = require("../models/user.model");
 const { encrypt } = require("../utils/passwordEncoder");
+const { statsdClient } = require("../utils/statsd")
 
 /**
  * Create and save user object in database
  * @param {*} userInfo
  */
 async function create(userInfo) {
+    const startTime = Date.now();
     const { first_name, last_name, email, password } = userInfo;
     const encryptedPassword = await encrypt(password);
     const user = User.build({
@@ -15,6 +17,7 @@ async function create(userInfo) {
         password: encryptedPassword,
     });
     await user.save();
+    statsdClient.timing("db.users.create", Date.now() - startTime);
     return user.toJSON();
 }
 
@@ -23,6 +26,7 @@ async function create(userInfo) {
  * @param {string} email
  */
 async function getByEmail(email) {
+    const startTime = Date.now();
     const user = await User.findOne({
         where: {
             email: email,
@@ -32,6 +36,7 @@ async function getByEmail(email) {
         logger.error(`No User with email ${email}`);
         return {};
     }
+    statsdClient.timing("db.users.getByEmail", Date.now() - startTime);
     return user.toJSON();
 }
 
@@ -40,6 +45,7 @@ async function getByEmail(email) {
  * @param {*} userInfo
  */
 async function update(email, userInfo) {
+    const startTime = Date.now();
     const user = await User.findOne({
         where: {
             email: email,
@@ -52,6 +58,7 @@ async function update(email, userInfo) {
         ...userInfo,
     });
     await user.save();
+    statsdClient.timing("db.users.update", Date.now() - startTime);
 }
 
 module.exports = {

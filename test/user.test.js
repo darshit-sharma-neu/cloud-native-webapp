@@ -1,7 +1,7 @@
 const request = require("supertest");
 const { app,server } = require("../index");
 const { consoleStream } = require("../utils/logger");
-const { statsdClient } = require("../middlewares/countApiCalls.middleware")
+const { statsdClient } = require("../utils/statsd");
 const randomNumber = Math.floor(Math.random() * (100000 - 500 + 1)) + 500;
 const email = `darshit${randomNumber}@example.com`;
 

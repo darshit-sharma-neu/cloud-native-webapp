@@ -1,7 +1,7 @@
 name: Build AMI using Packer
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 

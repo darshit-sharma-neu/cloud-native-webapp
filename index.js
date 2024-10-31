@@ -2,15 +2,17 @@ const Express = require("express");
 const app = Express();
 const config = require("config");
 const logger = require("./utils/logger");
-const { connect } = require("./utils/databaseConnector");
 const healthzRouter = require("./routes/healthz.route");
 const pageNotFoundRouter = require("./routes/pageNotFound.route");
 const userRouter = require("./routes/user.route");
-const { checkJsonValidity } = require("./middlewares/validJSON.middleware");
+const { checkJsonValidity } = require("./middlewares/validJSON.middleware");c
+const { countApiCalls } = require("./middlewares/countApiCalls.middleware");
+
 
 // middlewares
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
+app.use(countApiCalls);
 
 // Routes go here
 app.use("/healthz", healthzRouter);

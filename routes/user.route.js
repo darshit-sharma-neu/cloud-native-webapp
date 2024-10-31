@@ -17,7 +17,7 @@ router
     .post(checkAuth, (req,res,next) => {
         upload.single('profilePic')(req,res,(err) => {
             if (err) {
-                if (err.message === 'Only images are allowed') {
+                if (err.message === 'Only images are allowed' || err.message === 'Unexpected field') {
                     logger.error({ error: err.message }, "Image upload failed");
                     return res.status(400).send();
                 }

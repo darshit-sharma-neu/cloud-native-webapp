@@ -1,11 +1,14 @@
 const request = require("supertest");
 const { app,server } = require("../index");
-
+const { consoleStream } = require("../utils/logger");
+const { statsdClient } = require("../utils/statsd");
 const randomNumber = Math.floor(Math.random() * (100000 - 500 + 1)) + 500;
 const email = `darshit${randomNumber}@example.com`;
 
 describe("User API Integration Test", () => {
     afterAll((done) => {
+        consoleStream.end();
+        statsdClient.close();
         server.close(done);
     });
     describe("POST /v1/user", () => {

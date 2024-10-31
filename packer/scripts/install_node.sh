@@ -25,3 +25,11 @@ cd /home/webapp
 echo "Installing dependencies"
 sudo npm install
 echo "Webapp setup completed"
+
+# Create temp and log directories
+sudo mkdir /home/webapp/temp
+sudo mkdir /home/webapp/logs
+sudo chown -R csye6225:csye6225 /home/webapp/temp
+sudo chown -R csye6225:csye6225 /home/webapp/logs
+ls -ls /home/webapp
+echo "Webapp directories creation completed"

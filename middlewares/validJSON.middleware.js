@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const {logger} = require('../utils/logger');
 
 function checkJsonValidity(err, req, res, next) {
     if (err instanceof SyntaxError && err.status === 400 && "body" in err) {

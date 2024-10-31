@@ -1,16 +1,23 @@
 const Express = require("express");
 const app = Express();
 const config = require("config");
-const logger = require("./utils/logger");
-const { connect } = require("./utils/databaseConnector");
+const {logger} = require("./utils/logger");
 const healthzRouter = require("./routes/healthz.route");
 const pageNotFoundRouter = require("./routes/pageNotFound.route");
 const userRouter = require("./routes/user.route");
+const { requestLogger } = require("./middlewares/requestLogger.middleware");
 const { checkJsonValidity } = require("./middlewares/validJSON.middleware");
+const { countApiCalls } = require("./middlewares/countApiCalls.middleware");
+const { trackApiResponseTime } = require("./middlewares/trackApiResponseTime.middleware");
 
+// Request Logger 
+app.use(requestLogger)
 // middlewares
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
+// metrics middleware
+app.use(countApiCalls);
+app.use(trackApiResponseTime);
 
 // Routes go here
 app.use("/healthz", healthzRouter);

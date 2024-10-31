@@ -28,7 +28,7 @@ echo "Webapp setup completed"
 
 # Create temp and log directories
 sudo mkdir /home/webapp/temp
-sudo mkdir /home/webapp/log
+sudo mkdir /home/webapp/logs
 sudo chown -R csye6225:csye6225 /home/webapp/temp
 sudo chown -R csye6225:csye6225 /home/webapp/log
 ls -ls /home/webapp

@@ -30,6 +30,6 @@ echo "Webapp setup completed"
 sudo mkdir /home/webapp/temp
 sudo mkdir /home/webapp/logs
 sudo chown -R csye6225:csye6225 /home/webapp/temp
-sudo chown -R csye6225:csye6225 /home/webapp/log
+sudo chown -R csye6225:csye6225 /home/webapp/logs
 ls -ls /home/webapp
 echo "Webapp directories creation completed"

@@ -5,7 +5,7 @@ const logger = require("./utils/logger");
 const healthzRouter = require("./routes/healthz.route");
 const pageNotFoundRouter = require("./routes/pageNotFound.route");
 const userRouter = require("./routes/user.route");
-const { checkJsonValidity } = require("./middlewares/validJSON.middleware");c
+const { checkJsonValidity } = require("./middlewares/validJSON.middleware");
 const { countApiCalls } = require("./middlewares/countApiCalls.middleware");
 
 

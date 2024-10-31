@@ -17,6 +17,7 @@ app.use("/healthz", healthzRouter);
 app.use("/v1/user", userRouter);
 app.use("*", pageNotFoundRouter);
 
+// Check JSON validity
 app.use(checkJsonValidity);
 
 const server = app.listen(config.get("SERVER.PORT"), () => {

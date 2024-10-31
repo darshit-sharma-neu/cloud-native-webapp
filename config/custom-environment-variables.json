@@ -5,5 +5,11 @@
         "PASSWORD": "DB_PASS",
         "PORT": "DB_PORT",
         "HOST": "DB_HOST"
+    },
+    "S3": {
+        "BUCKET_NAME": "BUCKET_NAME"
+    },
+    "SERVER": {
+        "PORT": "PORT"
     }
 }

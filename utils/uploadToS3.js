@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
-const logger = require('./logger')
+const {logger} = require('./logger')
 const config = require('config');
 
 /**

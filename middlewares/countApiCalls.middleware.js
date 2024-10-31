@@ -13,5 +13,5 @@ function countApiCalls(req, res, next) {
 }
 
 module.exports = {
-    countApiCalls,
+    countApiCalls, statsdClient
 }

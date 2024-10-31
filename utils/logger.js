@@ -17,4 +17,4 @@ const logger = pino({
     pino.multistream([consoleStream, logWriteStream])
 );
 
-module.exports = logger;
+module.exports = {logger, consoleStream};

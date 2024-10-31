@@ -1,6 +1,6 @@
 const { Request, Response, NextFunction } = require("express");
 const { create, getByUserEmail, deleteImageByUserEmail  } = require("../services/profileImage.service");
-const logger = require("../utils/logger");
+const {logger} = require("../utils/logger");
 const fs = require("fs");
 
 /**

@@ -1,7 +1,7 @@
 const { getByEmail } = require("../services/user.service");
 const { uploadToS3, deleteImage } = require("../utils/uploadToS3");
 const { ProfileImage } = require("../models/profileImage.model");
-const logger = require("../utils/logger");
+const {logger} = require("../utils/logger");
 
 /**
  * Upload Images to S3

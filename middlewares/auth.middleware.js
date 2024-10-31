@@ -2,7 +2,7 @@ const { User } = require("../models/user.model");
 const { Request, Response, NextFunction } = require("express");
 const { compare } = require("../utils/passwordEncoder");
 const { checkConnection } = require('../utils/databaseConnector')
-
+const {logger} = require("../utils/logger");
 /**
  *
  * @param {Request} req

@@ -1,6 +1,6 @@
 const { Request, Response, NextFunction } = require("express");
 const { create, getByEmail, update } = require("../services/user.service");
-const logger = require("../utils/logger");
+const {logger} = require("../utils/logger");
 const { checkConnection } = require("../utils/databaseConnector");
 
 /**

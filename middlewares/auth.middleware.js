@@ -1,8 +1,14 @@
 const { User } = require("../models/user.model");
 const { Request, Response, NextFunction } = require("express");
 const { compare } = require("../utils/passwordEncoder");
-const { checkConnection } = require('../utils/databaseConnector')
-const {logger} = require("../utils/logger");
+const { checkConnection } = require("../utils/databaseConnector");
+const { logger } = require("../utils/logger");
+const {
+    USER_NOT_VERIFIED,
+    USER_UNAUTHORIZED,
+    checkCredentials,
+} = require("../services/user.service");
+
 /**
  *
  * @param {Request} req
@@ -12,7 +18,7 @@ const {logger} = require("../utils/logger");
 async function checkAuth(req, res, next) {
     try {
         if (req.headers.authorization) {
-            if(!(await checkConnection())){
+            if (!(await checkConnection())) {
                 res.status(503).send();
                 return;
             }
@@ -22,15 +28,12 @@ async function checkAuth(req, res, next) {
             )
                 .toString()
                 .split(":");
-            let user = await User.findOne({
-                where: {
-                    email: email,
-                },
-            });
-            if (!user) {
+            const response = await checkCredentials(email, password);
+
+            if (response === USER_UNAUTHORIZED) {
                 res.status(401).send();
-            } else if (!(await compare(password, user.password))) {
-                res.status(401).send();
+            } else if (response === USER_NOT_VERIFIED) {
+                res.status(403).send();
             } else {
                 const userContext = {
                     email,
@@ -43,7 +46,7 @@ async function checkAuth(req, res, next) {
         }
     } catch (error) {
         res.status(500).send();
-        logger.error(error.message)
+        logger.error(error.message);
     }
 }
 

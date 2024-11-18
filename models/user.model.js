@@ -40,6 +40,11 @@ const User = getSequelize()?.define(
                 notEmpty: true,
             },
         },
+        verified: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        }
     },
     {
         timestamps: true,

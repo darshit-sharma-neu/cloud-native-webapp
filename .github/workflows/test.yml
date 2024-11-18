@@ -15,7 +15,7 @@ jobs:
             DB_PASS: ${{secrets.DB_PASS}}
             DB_PORT: ${{secrets.DB_PORT}}
             DB_NAME: ${{secrets.DB_NAME}}
-            SNS_ARN: ""
+            SNS_ARN: "some-arn"
 
         services:
             mysql:

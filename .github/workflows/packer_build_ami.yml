@@ -93,3 +93,41 @@ jobs:
               run: |
                   cd packer 
                   packer build  -var="region=$region" -var="ssh_username=$ssh_username" -var="instance_type=$instance_type" -var="source_ami=$source_ami" template.pkr.hcl
+    update_launch_template:
+        name: "Update Launch Template"
+        needs: packer_build_ami
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Configure AWS credentials
+            uses: aws-actions/configure-aws-credentials@v4
+            with:
+              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
+              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
+              aws-region: ${{ secrets.REGION }}
+
+          - name: Get Launch Template Name
+            id: get_launch_template
+            run: |
+              LAUNCH_TEMPLATE_ID=$(aws ec2 describe-launch-templates \
+                --query "LaunchTemplates[0].LaunchTemplateId" --output text)
+              LAUNCH_TEMPLATE_NAME=$(aws ec2 describe-launch-templates \
+                --query "LaunchTemplates[0].LaunchTemplateName" --output text)
+              echo "LAUNCH_TEMPLATE_ID=$LAUNCH_TEMPLATE_ID" >> $GITHUB_ENV
+              echo "LAUNCH_TEMPLATE_NAME=$LAUNCH_TEMPLATE_NAME" >> $GITHUB_ENV
+
+          - name: Update Launch Template with Latest AMI
+            run: |
+              NEW_AMI_ID=$(aws ec2 describe-images --owners self --filters "Name=tag:Name,Values=YourPackerBuiltAMI" --query "Images[0].ImageId" --output text)
+              aws ec2 create-launch-template-version \
+                --launch-template-id $LAUNCH_TEMPLATE_ID \
+                --launch-template-data '{"ImageId": "'$NEW_AMI_ID'"}'
+
+          - name: Update Auto Scaling Group with New Launch Template Version
+            run: |
+              NEW_VERSION=$(aws ec2 describe-launch-template-versions \
+                --launch-template-id $LAUNCH_TEMPLATE_ID \
+                --query "LaunchTemplateVersions[-1].VersionNumber" --output text)
+              aws autoscaling update-auto-scaling-group \
+                --auto-scaling-group-name "csye6225-webapp-autoscaler" \
+                --launch-template '{"LaunchTemplateId":"'$LAUNCH_TEMPLATE_ID'","Version":"'$NEW_VERSION'"}'

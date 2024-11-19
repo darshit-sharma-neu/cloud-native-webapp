@@ -95,7 +95,7 @@ jobs:
                   packer build  -var="region=$region" -var="ssh_username=$ssh_username" -var="instance_type=$instance_type" -var="source_ami=$source_ami" template.pkr.hcl
     
     update_launch_template:
-        name: "Update Launch Template"
+        name: "Update Launch Template And Refresh Auto Scaling Group"
         needs: packer_build_ami
         runs-on: ubuntu-latest
 
@@ -125,32 +125,23 @@ jobs:
                 --source-version '$Latest' \
                 --launch-template-data '{"ImageId": "'$NEW_AMI_ID'"}'
 
-          - name: Update Auto Scaling Group with New Launch Template Version
+          - name: Update default ami version
             run: |
-              NEW_VERSION=$(aws ec2 describe-launch-template-versions \
+              aws ec2 modify-launch-template \
                 --launch-template-id $LAUNCH_TEMPLATE_ID \
-                --query "LaunchTemplateVersions[-1].VersionNumber" --output text)
-              aws autoscaling update-auto-scaling-group \
+                --default-version '$Latest'
+
+          - name: Configure AWS credentials
+            uses: aws-actions/configure-aws-credentials@v4
+            with:
+              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
+              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
+              aws-region: ${{ secrets.REGION }}
+
+          - name: Start Instance Refresh
+            id: start_refresh
+            run: |
+              REFRESH_ID=$(aws autoscaling start-instance-refresh \
                 --auto-scaling-group-name "csye6225-webapp-autoscaler" \
-                --launch-template '{"LaunchTemplateId":"'$LAUNCH_TEMPLATE_ID'","Version":"'$NEW_VERSION'"}'
-
-    instance_refresh:
-      name: "Instance Refresh"
-      needs: update_launch_template
-      runs-on: ubuntu-latest
-
-      steps:
-        - name: Configure AWS credentials
-          uses: aws-actions/configure-aws-credentials@v4
-          with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
-            aws-region: ${{ secrets.REGION }}
-
-        - name: Start Instance Refresh
-          id: start_refresh
-          run: |
-            REFRESH_ID=$(aws autoscaling start-instance-refresh \
-              --auto-scaling-group-name "csye6225-webapp-autoscaler" \
-              --query "InstanceRefreshId" --output text)
-            echo "REFRESH_ID=$REFRESH_ID" >> $GITHUB_ENV 
+                --query "InstanceRefreshId" --output text)
+              echo "REFRESH_ID=$REFRESH_ID" >> $GITHUB_ENV 

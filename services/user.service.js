@@ -6,6 +6,7 @@ const USER_UNAUTHORIZED = "USER_UNAUTHORIZED";
 const USER_NOT_VERIFIED = "USER_NOT_VERIFIED";
 const USER_AUTHORIZED = "USER_AUTHORIZED";
 
+
 /**
  * Create and save user object in database
  * @param {*} userInfo
@@ -79,7 +80,7 @@ async function checkCredentials(email, password) {
         },
     });
     if (!user) {
-        return USER_NOT_FOUND;
+        return USER_UNAUTHORIZED;
     }
     if (!(await compare(password, user.password))) {
         return USER_UNAUTHORIZED;
@@ -120,5 +121,5 @@ module.exports = {
     isVerified,
     USER_UNAUTHORIZED,
     USER_NOT_VERIFIED,
-    USER_AUTHORIZED,
+    USER_AUTHORIZED
 };

@@ -10,93 +10,93 @@ on:
       - main
 
 jobs:
-    # build_and_test:
-    #     name: "Build and Test"
-    #     runs-on: ubuntu-latest
-    #     env:
-    #         DB_HOST: ${{secrets.DB_HOST}}
-    #         DB_USER: ${{secrets.TEST_DB_USER}}
-    #         DB_PASS: ${{secrets.DB_PASS}}
-    #         DB_PORT: ${{secrets.DB_PORT}}
-    #         DB_NAME: ${{secrets.DB_NAME}}
-    #         SNS_ARN: "some-arn"
+    build_and_test:
+        name: "Build and Test"
+        runs-on: ubuntu-latest
+        env:
+            DB_HOST: ${{secrets.DB_HOST}}
+            DB_USER: ${{secrets.TEST_DB_USER}}
+            DB_PASS: ${{secrets.DB_PASS}}
+            DB_PORT: ${{secrets.DB_PORT}}
+            DB_NAME: ${{secrets.DB_NAME}}
+            SNS_ARN: "some-arn"
 
-    #     services:
-    #         mysql:
-    #             image: mysql:8.0
-    #             env:
-    #                 MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASS}}
-    #                 MYSQL_DATABASE: ${{secrets.DB_NAME}}
-    #             ports:
-    #                 - 3306:3306
+        services:
+            mysql:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASS}}
+                    MYSQL_DATABASE: ${{secrets.DB_NAME}}
+                ports:
+                    - 3306:3306
 
-    #     steps:
-    #         - name: Checkout code
-    #           uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-    #         - name: Setup Node.js
-    #           uses: actions/setup-node@v4
-    #           with:
-    #             node-version: '20'
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: '20'
 
-    #         - name: Create Logs folder
-    #           run: mkdir -p logs
+            - name: Create Logs folder
+              run: mkdir -p logs
 
-    #         - name: Install dependencies
-    #           run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-    #         - name: Run integration tests
-    #           run: npm run test
+            - name: Run integration tests
+              run: npm run test
 
-    # packer_build_ami:
-    #     name: "Build AMI using Packer"
-    #     needs: build_and_test
-    #     runs-on: ubuntu-latest
-    #     env:
-    #         region: ${{secrets.region}}
-    #         ssh_username: ${{secrets.ssh_username}}
-    #         AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-    #         AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-    #         instance_type: ${{secrets.instance_type}}
-    #         source_ami: ${{secrets.source_ami}}
+    packer_build_ami:
+        name: "Build AMI using Packer"
+        needs: build_and_test
+        runs-on: ubuntu-latest
+        env:
+            region: ${{secrets.region}}
+            ssh_username: ${{secrets.ssh_username}}
+            AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+            AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+            instance_type: ${{secrets.instance_type}}
+            source_ami: ${{secrets.source_ami}}
 
 
-    #     steps:
-    #         - name: Checkout repository
-    #           uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-    #         - name: Zip repo
-    #           run: |
-    #               zip -r packer/webapp.zip ../webapp
+            - name: Zip repo
+              run: |
+                  zip -r packer/webapp.zip ../webapp
 
-    #         - name: Install Packer
-    #           run: |
-    #               curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-    #               sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-    #               sudo apt-get update && sudo apt-get install packer
-    #               packer --version
+            - name: Install Packer
+              run: |
+                  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+                  sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+                  sudo apt-get update && sudo apt-get install packer
+                  packer --version
 
-    #         - name: Configure AWS credentials
-    #           uses: aws-actions/configure-aws-credentials@v4
-    #           with:
-    #               aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #               aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #               aws-region: ${{ secrets.REGION }}
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ secrets.REGION }}
 
-    #         - name: Packer init
-    #           run: packer init packer/template.pkr.hcl
+            - name: Packer init
+              run: packer init packer/template.pkr.hcl
 
-    #         - name: Format Packer Template
-    #           run: packer fmt -check packer/template.pkr.hcl
+            - name: Format Packer Template
+              run: packer fmt -check packer/template.pkr.hcl
 
-    #         - name: Build Packer Template
-    #           run: |
-    #               cd packer 
-    #               packer build  -var="region=$region" -var="ssh_username=$ssh_username" -var="instance_type=$instance_type" -var="source_ami=$source_ami" template.pkr.hcl
+            - name: Build Packer Template
+              run: |
+                  cd packer 
+                  packer build  -var="region=$region" -var="ssh_username=$ssh_username" -var="instance_type=$instance_type" -var="source_ami=$source_ami" template.pkr.hcl
     
     update_launch_template:
         name: "Update Launch Template"
-        # needs: packer_build_ami
+        needs: packer_build_ami
         runs-on: ubuntu-latest
 
         steps:
@@ -122,7 +122,7 @@ jobs:
               NEW_AMI_ID=$(aws ec2 describe-images --owners ${{secrets.AWS_DEV_ACC_ID}} --query "Images | sort_by(@, &CreationDate)[-1].ImageId" --output text)
               aws ec2 create-launch-template-version \
                 --launch-template-id $LAUNCH_TEMPLATE_ID \
-                --source-version '$Latest' \
+                --source-version $Latest' \
                 --launch-template-data '{"ImageId": "'$NEW_AMI_ID'"}'
 
           - name: Update Auto Scaling Group with New Launch Template Version

@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-      
-  pull_request:
-    branches:
-      - main
 
 jobs:
     build_and_test:
@@ -130,13 +126,6 @@ jobs:
               aws ec2 modify-launch-template \
                 --launch-template-id $LAUNCH_TEMPLATE_ID \
                 --default-version '$Latest'
-
-          - name: Configure AWS credentials
-            uses: aws-actions/configure-aws-credentials@v4
-            with:
-              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
-              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
-              aws-region: ${{ secrets.REGION }}
 
           - name: Start Instance Refresh
             id: start_refresh

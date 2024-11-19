@@ -118,7 +118,7 @@ jobs:
 
           - name: Update Launch Template with Latest AMI
             run: |
-              NEW_AMI_ID=$(aws ec2 describe-images --owners self --filters "Name=tag:Name,Values=YourPackerBuiltAMI" --query "Images[0].ImageId" --output text)
+              NEW_AMI_ID=$(aws ec2 describe-images --owners self --filters "Name=tag:Name,Values=csye6225-webapp-build" --query "Images[0].ImageId" --output text)
               aws ec2 create-launch-template-version \
                 --launch-template-id $LAUNCH_TEMPLATE_ID \
                 --launch-template-data '{"ImageId": "'$NEW_AMI_ID'"}'

@@ -132,3 +132,29 @@ jobs:
               aws autoscaling update-auto-scaling-group \
                 --auto-scaling-group-name "csye6225-webapp-autoscaler" \
                 --launch-template '{"LaunchTemplateId":"'$LAUNCH_TEMPLATE_ID'","Version":"'$NEW_VERSION'"}'
+
+    instance_refresh:
+      name: "Instance Refresh"
+      needs: update_launch_template
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
+            aws-region: ${{ secrets.REGION }}
+
+        - name: Start Instance Refresh
+          id: start_refresh
+          run: |
+            REFRESH_ID=$(aws autoscaling start-instance-refresh \
+              --auto-scaling-group-name "csye6225-webapp-autoscaler" \
+              --query "InstanceRefreshId" --output text)
+            echo "REFRESH_ID=$REFRESH_ID" >> $GITHUB_ENV
+
+        - name: Wait for Instance Refresh to Complete
+          run: |
+            aws autoscaling wait instance-refresh-successful \
+              --auto-scaling-group-name "csye6225-webapp-autoscaler" 

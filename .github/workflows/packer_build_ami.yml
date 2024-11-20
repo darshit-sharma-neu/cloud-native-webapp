@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
     build_and_test:
@@ -134,3 +137,25 @@ jobs:
                 --auto-scaling-group-name "csye6225-webapp-autoscaler" \
                 --query "InstanceRefreshId" --output text)
               echo "REFRESH_ID=$REFRESH_ID" >> $GITHUB_ENV 
+
+          - name: Wait for Instance Refresh to Complete
+            run: |
+              while true; do
+                REFRESH_STATUS=$aws autoscaling describe-instance-refreshes \
+                  --auto-scaling-group-name "csye6225-webapp-autoscaler" \
+                  --query "InstanceRefreshes[?InstanceRefreshId=='$REFRESH_ID'].Status" \
+                  --output text)
+                
+                echo "Current Status : $REFRESH_STATUS"
+
+                if["$REFRESH_STATUS" == "Successful"]; then
+                  echo "Instance Refresh Completed"
+                  break
+                elif["$REFRESH_STATUS" == "Failed"]; then
+                  echo "Instance Refresh Failed"
+                  exit 1
+                else
+                  echo "Waiting for Instance Refresh to Complete"
+                  sleep 30
+                fi
+              done

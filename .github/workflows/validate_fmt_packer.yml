@@ -3,7 +3,7 @@ name: Packer Validate and Format Check
 on:
     pull_request:
         branches:
-            - mainm
+            - main
 
 jobs:
     packer_validate_fmt:

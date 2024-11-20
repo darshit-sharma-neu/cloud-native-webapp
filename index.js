@@ -22,7 +22,6 @@ app.use(trackApiResponseTime);
 
 // Routes go here
 app.use("/healthz", healthzRouter);
-app.use("/cicd", healthzRouter);
 app.use("/v1/user", userRouter);
 app.use("/v1/verify", veriftRouter);
 app.use("*", pageNotFoundRouter);

@@ -1,7 +1,9 @@
 const { Request, Response, NextFunction } = require("express");
 const { create, getByEmail, update } = require("../services/user.service");
+const verificationService = require("../services/verification.service");
 const {logger} = require("../utils/logger");
 const { checkConnection } = require("../utils/databaseConnector");
+const { sendVerificationEmail } = require("../services/mail.service");
 
 /**
  *
@@ -30,7 +32,9 @@ async function postController(req, res, next) {
         }
         const userInfo = req.body;
         const user = await create(userInfo);
+        let verificationRecord = await verificationService.create(user.email);
         const { password, ...userResponse } = user;
+        await sendVerificationEmail(userResponse.email, verificationRecord.token);
         res.status(201).send(userResponse);
     } catch (e) {
         if (

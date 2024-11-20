@@ -11,5 +11,8 @@
     },
     "SERVER": {
         "PORT": "PORT"
+    },
+    "SNS": {
+        "ARN": "SNS_ARN"
     }
 }

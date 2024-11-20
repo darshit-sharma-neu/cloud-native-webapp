@@ -15,6 +15,7 @@ jobs:
             DB_PASS: ${{secrets.DB_PASS}}
             DB_PORT: ${{secrets.DB_PORT}}
             DB_NAME: ${{secrets.DB_NAME}}
+            SNS_ARN: "some-arn"
 
         services:
             mysql:
@@ -88,3 +89,70 @@ jobs:
               run: |
                   cd packer 
                   packer build  -var="region=$region" -var="ssh_username=$ssh_username" -var="instance_type=$instance_type" -var="source_ami=$source_ami" template.pkr.hcl
+    
+    update_launch_template:
+        name: "Update Launch Template And Refresh Auto Scaling Group"
+        needs: packer_build_ami
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Configure AWS credentials
+            uses: aws-actions/configure-aws-credentials@v4
+            with:
+              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
+              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
+              aws-region: ${{ secrets.REGION }}
+
+          - name: Get Launch Template Name
+            id: get_launch_template
+            run: |
+              LAUNCH_TEMPLATE_ID=$(aws ec2 describe-launch-templates \
+                --query "LaunchTemplates[0].LaunchTemplateId" --output text)
+              LAUNCH_TEMPLATE_NAME=$(aws ec2 describe-launch-templates \
+                --query "LaunchTemplates[0].LaunchTemplateName" --output text)
+              echo "LAUNCH_TEMPLATE_ID=$LAUNCH_TEMPLATE_ID" >> $GITHUB_ENV
+              echo "LAUNCH_TEMPLATE_NAME=$LAUNCH_TEMPLATE_NAME" >> $GITHUB_ENV
+
+          - name: Update Launch Template with Latest AMI
+            run: |
+              NEW_AMI_ID=$(aws ec2 describe-images --owners ${{secrets.AWS_DEV_ACC_ID}} --query "Images | sort_by(@, &CreationDate)[-1].ImageId" --output text)
+              aws ec2 create-launch-template-version \
+                --launch-template-id $LAUNCH_TEMPLATE_ID \
+                --source-version '$Latest' \
+                --launch-template-data '{"ImageId": "'$NEW_AMI_ID'"}'
+
+          - name: Update default ami version
+            run: |
+              aws ec2 modify-launch-template \
+                --launch-template-id $LAUNCH_TEMPLATE_ID \
+                --default-version '$Latest'
+
+          - name: Start Instance Refresh
+            id: start_refresh
+            run: |
+              REFRESH_ID=$(aws autoscaling start-instance-refresh \
+                --auto-scaling-group-name "csye6225-webapp-autoscaler" \
+                --query "InstanceRefreshId" --output text)
+              echo "REFRESH_ID=$REFRESH_ID" >> $GITHUB_ENV 
+
+          - name: Wait for Instance Refresh to Complete
+            run: |
+             while true; do
+                REFRESH_STATUS=$(aws autoscaling describe-instance-refreshes \
+                  --auto-scaling-group-name "csye6225-webapp-autoscaler" \
+                  --query "InstanceRefreshes[?InstanceRefreshId=='$REFRESH_ID'].Status" \
+                  --output text)
+
+                echo "Current Status: $REFRESH_STATUS"
+
+                if [ "$REFRESH_STATUS" == "Successful" ]; then
+                  echo "Instance Refresh Completed"
+                  break
+                elif [ "$REFRESH_STATUS" == "Failed" ]; then
+                  echo "Instance Refresh Failed"
+                  exit 1
+                else
+                  echo "Waiting for Instance Refresh to Complete"
+                  sleep 30
+                fi
+              done

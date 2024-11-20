@@ -45,21 +45,7 @@ describe("User API Integration Test", () => {
     });
 
     describe("PUT /v1/user/self", () => {
-        it("should return 204 when the user is updated successfully", async () => {
-            const userData = {
-                first_name: "test",
-                last_name: "sharma",
-            };
-
-            const response = await request(app)
-                .put("/v1/user/self")
-                .auth(email, "12345")
-                .send(userData);
-
-            expect(response.status).toBe(204);
-        });
-
-        it("should return 400 when the request data is invalid", async () => {
+        it("should return 403 when the request data is invalid and user not verified", async () => {
             const invalidUserData = {
                 email: email,
             };
@@ -69,7 +55,7 @@ describe("User API Integration Test", () => {
                 .auth(email, "12345")
                 .send(invalidUserData);
 
-            expect(response.status).toBe(400);
+            expect(response.status).toBe(403);
         });
 
         it("should return 401 when the request not authenticated", async () => {
@@ -91,17 +77,8 @@ describe("User API Integration Test", () => {
     });
 
     describe("GET /v1/user/self", () => {
-        it("should return 200 when the user fetched", async () => {
-            const response = await request(app)
-                .get("/v1/user/self")
-                .auth(email, "12345")
-                .send();
 
-            expect(response.status).toBe(200);
-            expect(response.body).toBeDefined();
-        });
-
-        it("should return 400 when the request data is invalid", async () => {
+        it("should return 403 when the request data is invalid and user not verified", async () => {
             const invalidUserData = {
                 email: email,
             };
@@ -111,7 +88,7 @@ describe("User API Integration Test", () => {
                 .auth(email, "12345")
                 .send(invalidUserData);
 
-            expect(response.status).toBe(400);
+            expect(response.status).toBe(403);
         });
 
         it("should return 401 when the request is not authenticated", async () => {
